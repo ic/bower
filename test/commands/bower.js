@@ -4,15 +4,17 @@ var helpers = require('../helpers');
 describe('bower', function () {
 
     var oldStdout;
-    var text;
+    var origArgv;
+    var text = '';
 
     before(function() {
         oldStdout = process.stdout.write;
-        text = '';
-
         process.stdout.write = function(args) {
             text += args;
         };
+
+        origArgv = process.argv;
+        process.argv = [];
     });
 
     it('runs bower installation', function (done) {
@@ -24,6 +26,7 @@ describe('bower', function () {
     });
 
     after(function() {
+        process.argv = origArgv;
         process.stdout.write = oldStdout;
         expect(text).to.contain('Usage:');
         expect(text).to.contain('Commands:');
